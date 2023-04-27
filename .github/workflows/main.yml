@@ -1,7 +1,23 @@
-- name: Github Action for Typst
-  # You may pin to the exact commit or the version.
-  # uses: lvignoli/typst-action@716203d1b056aa8879fe7c9e2d985427ebd056c9
-  uses: lvignoli/typst-action@v1
-  with:
-    # The typst file to be compiled. There can be multiple ones separated by new lines.
-    source_file: euler-lagrange.typ
+name: Build PDF using typst
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Build Typst
+      uses: lvignoli/typst-action@v1
+      with:
+        source_file: euler-lagrange.typ
+    - name: Upload PDF file
+      uses: actions/upload-artifact@v3
+      with:
+        name: PDF
+        path: euler-lagrange.pdf
