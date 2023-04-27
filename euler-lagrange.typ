@@ -19,7 +19,7 @@ Euler-Lagrange equation is defined as below.
 $ (diff cal(L)) / (diff q_i) - d / (d t) (diff cal(L)) / (diff dot(q_i)) = 0  $ <euler>
 
 where $L$ is Lagrangean, $q_i$ generalized coordinate,
-$q_i˙$ generalized velocity (generalized coordinate derived w.r.t time).
+$dot(q)_i$ generalized velocity (generalized coordinate derived w.r.t time).
 
 Lagrangean is defined as
 $ L = T − V $
@@ -60,7 +60,7 @@ To be precise, the maxima, the saddle points or the extrema can be stationary po
 I can't prove that, if you ask me.
 
 A little special thing about the stationary point is that what we want to “station” against is not variables but the function.
-We want to fiddle the function shape of $f(x, dot(x))$ to make the A minimum.
+We want to fiddle the function shape of $f(x, dot(x))$ to make the $A$ minimum.
 The variational principle expresses this by putting $delta$ in front of the function.
 That is, the condition of stationary point is
 
@@ -77,11 +77,11 @@ $ f(x_i, (x_i - x_(i - 1)) / epsilon). $
 Now, what happens to $f$ when we change the value of $i$th value $x_i$?
 First, let's write down $f$'s partial derivative at $i$th sample $f_i$ w.r.t. $x_i$,
 
-$ diff / (diff x_i) &= diff / (diff x_i) f (x_i, (x_i - x_(i - 1) / epsilon)) \
+$ diff / (diff x_i) &= diff / (diff x_i) f (x_i, (x_i - x_(i - 1)) / epsilon) \
 &= (diff f_i) / (diff x_i) + (diff v_i) / (diff x_i) (diff f_i) / (diff v_i) \
 &= (diff f_i) / (diff x_i) + 1 / epsilon (diff f_i) / (diff v_i)
 $
-where I put $v_i ident (x_i - x_(i-1)) / epsilon$ for brevity.
+where I defined $v_i ident (x_i - x_(i-1)) / epsilon$ for brevity.
 
 We also need to consider the contribution from $f_i + 1$ to calculate total effect on $(diff f) / (diff x_i)$.
 
@@ -97,7 +97,7 @@ $ (diff f_i) / (diff x_i) + 1 / epsilon (diff f_i) / (diff v_i) - 1 / epsilon (d
 Now, $(f_(i + 1) - f_i) / epsilon$ is nothing but derivative in the limit of $epsilon -> 0$.
 Also, $v_i$ becomes the derivative of position w.r.t. time, that is, velocity.
 
-Making them zero means
+Taking the limit yields
 
 $ (diff f_i) / (diff x_i) - d / (d t) (diff f_i) / (diff dot(x)_i) = 0. $
 
