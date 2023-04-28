@@ -308,6 +308,10 @@ Let's obtain total differentiation of Hamiltonian.
 
 $ d cal(H) = sum_i [ dot(q)_i d p_i + p_i d dot(q) - (diff cal(L)) / (diff dot(q)_i) d dot(q)_i - (diff cal(L)) / (diff q_i) d q_i] $
 
+Now, we can use $(diff cal(L)) / (diff dot(q)_i) = p_i$, $(diff cal(L)) / (diff p_i) = dot(q)_i$ to simplify it to
+
+$ d cal(H) = sum_i (dot(q)_i d p_i - dot(p)_i d q_i) $
+
 We can apply partial derivative to each of $p_i$ and $q_i$ to the Hamiltonian to obtain
 
 $ (diff cal(H)) / (diff p_i) &= dot(q)_i \
