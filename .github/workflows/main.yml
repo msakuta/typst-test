@@ -12,17 +12,27 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-    - name: Build Typst
+    - name: Build euler-lagrange.pdf with Typst
       uses: lvignoli/typst-action@v0
       with:
         source_file: euler-lagrange.typ
-    - name: Upload PDF file
+    - name: Build neural-network.pdf with Typst
+      uses: lvignoli/typst-action@v0
+      with:
+        source_file: neural-network.typ
+
+    - name: Upload Euler-Lagrange PDF file
       uses: actions/upload-artifact@v3
       with:
-        name: PDF
+        name: Euler-Lagrange PDF
         path: euler-lagrange.pdf
+    - name: Upload Neural network PDF file
+      uses: actions/upload-artifact@v3
+      with:
+        name: Neural network PDF
+        path: neural-network.pdf
 
-    - run: mkdir output && cp euler-lagrange.pdf output/
+    - run: mkdir output && cp *.pdf output/
 
     - name: Push to gh-pages
       uses: peaceiris/actions-gh-pages@v3
