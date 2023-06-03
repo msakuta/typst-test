@@ -97,7 +97,7 @@ For example, consider a simple neural network like @feedforward.
   caption: [Feedforward neural network]
 ) <feedforward>
 
-The input is represented as $s_i ( i = 1 , 2 , … ,n( 1 ))$, the weights of the first layer as $w^((1))_(i j) ( j = 1 , 2 , … ,n( 2 ))$, then the signal from the input layer to the hidden layer $s^((1))_j$ is transmitted as @eq_feedforward1.
+The input is represented as $s_i ( i = 1 , 2 , ... ,n( 1 ))$, the weights of the first layer as $w^((1))_(i j) ( j = 1 , 2 , ... ,n( 2 ))$, then the signal from the input layer to the hidden layer $s^((1))_j$ is transmitted as @eq_feedforward1.
 
 $ s^((1))_j = f( sum_(i = 1)^n w^((1))_(i j) s_i) $ <eq_feedforward1>
 
@@ -221,3 +221,122 @@ In particular, reuse of computation is important in deep neural networks because
 The idea of ​​this algorithm is a bit like his FFT butterfly operation.
 
 In this way, calculation is performed in order from the output side to the input side, so it is called back propagation.
+
+= Appendix
+
+== Derivatives
+
+You should know a little calculus to understand how neural networks work (or any machine learning algorithms in that regard).
+Your high school should have taught you about it, but the world is a diverse place now and I don't know if you had that opportunity.
+#footnote[Surprisingly many people don't have a clear idea of basic calculus, even in the field of AI research.
+I hope the reader is not one of them, or quit being a imposter like them.]
+
+=== Ordinary derivatives
+
+The definition of derivative is as follows:
+
+$ (d f) / (d x) = lim_(epsilon -> 0) (f(x + epsilon) - f(x)) / epsilon $ <eq:derive>
+
+The notion like $(d f)/(d x)$ was invented by Leipniz, who is also credited as one of the inventors of the calculus.
+The other person in credit that invented calculus at the same time (how that could happen was an interesting story for another time) is Newton.
+He also invented his version of notation, like $dot(f)$.
+
+The Leipniz notation has an advantage that it indicates a variable that derive $f$ with respect to.
+It is especially handy with partial derivatives.
+
+Let's do some exercies with basic functions.
+Consider a function @eq:square.
+
+$ f(x) = x^2 $ <eq:square>
+
+Let's put it into @eq:derive.
+
+$ (d f) / (d x) = lim_(epsilon -> 0) ((x + epsilon)^2 - x^2) / epsilon $
+
+You can calculate the denominator inside the limit as follows:
+
+$ (x + epsilon)^2 - x^2 &= x^2 + 2 epsilon x + epsilon^2 - x^2 \
+&= epsilon (2 x + epsilon)
+$
+
+Now, we can reduce the $epsilon$ to 0, since nothing is in the factor of $epsilon$.
+
+$ (d f) / (d x) = lim_(epsilon -> 0) (2 x + epsilon) = 2 x $
+
+You won't calculate the derivatives like this every time, but you can find tables of derivatives of common functions on the web.
+Basic ones like polynomials are worth memorizing since they are not too complex.
+
+$ (d x^n) / (d x) = n x^(n-1) $
+
+Another important technique to calculate derivatives is the chain rule.
+Suppose we had a function $f(x)$ which is in turn a variable of another function $g(f(x))$.
+Then we can calculate the derivative of $g$ with respect to $x$ using this "chain of derivatives".
+
+$ (d g) / (d x) = (d g) / (d f) (d f) / (d x) $
+
+It is not very clear with this abstract notation, so let's use an example functions like below.
+
+$ g(f) &= f^2 \
+  f(x) &= x + a $
+
+Here, $a$ is a constant.
+
+We can calculate the derivative of each function like below.
+
+$ (d g) / (d f) &= 2f \
+  (d f) / (d x) &= x $
+
+So the result of the whole derivative is:
+
+$ (d g) / (d x) = 2x (x + a) $
+
+Remember that you can define the intermediate function however you like.
+So if your function is given like this:
+
+$ g(x) = (x + a)^2 $
+
+you can see that you can define an intermediate function $f(x) = x + a$.
+This is one of the most basic technique to derive a complicated function.
+
+There are few other techniques like derivative of products, but I won't go into details.
+
+=== Partial derivatives
+
+Partial derivatives are derivatives on a function with multiple independent variables.
+For example, suppose we have a function with 2 variables, $f(x, y)$.
+The notion of each partial derivative with respect to each variable is like below.
+
+$ (diff f) / (diff x), (diff f) / (diff y) $
+
+When you compute a partial derivative, you fix the other variables as if they were constants.
+For example, let's take a function like below.
+
+$ f(x, y) = x^2 + y^2 $
+
+Partial derivatives are calculated like below.
+
+$ (diff f) / (diff x) = 2 x, (diff f) / (diff y) = 2 y $
+
+
+=== Total derivatives
+
+A less known variant of derivatives is called total derivatives.
+It is a derivative of a function with multiple variables, like partial derivatives, but it incorporates both variables.
+
+$ d f = (diff f) / (diff x) d x + (diff f) / (diff y) d y $
+
+The notable thing about total derivatives is that it doesn't specify a derived variable.
+In a sense, it is a template of derivatives that can adapt to any variable.
+
+It is useful when the variables $x, y$ are not independent.
+For example, if they are both dependent on the third variable, $z$, we can write like $x(z), y(z)$.
+Then, we can calculate like below:
+
+$ (d f) / (d z) = (diff f) / (diff x) (d x) / (d z) + (diff f) / (diff y) (d y) / (d z) $
+
+Another way to put it is that it is kind of a version of chain rule with multiple variables.
+
+=== Conclusion
+
+As you can see, the value of derivative is that it reduces the idea of taking limits (which drives minds crazy) into mere manipulation of symbols.
+It is one of the most successful mathematical tools and still a valuable tool in the age of computers to analyze complicated models in the world, as you are witnessing with deep learning.
