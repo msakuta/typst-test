@@ -59,7 +59,7 @@ This function is advantageous for activation function since it has derivatives o
 
 A sigmoid function is defined like @eq_sigmoiod and it looks like @sigmoid.
 
-$ sigma(x) = 1 / (1 + e^x) $ <eq_sigmoiod>
+$ sigma(x) = 1 / (1 + e^(-x)) $ <eq_sigmoiod>
 
 #figure(
   image("sigmoid.png", width: 60%),
