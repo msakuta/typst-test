@@ -2,7 +2,9 @@
 
 A test repository to store [typst](https://typst.app/) source code examples and its products.
 
-Check an example output PDF [here](https://github.com/msakuta/typst-test/blob/gh-pages/euler-lagrange.pdf), generated from [this source](euler-lagrange.typ)!
+Check an example output PDFs:
+* [Euler-Lagrange equation](https://github.com/msakuta/typst-test/blob/gh-pages/euler-lagrange.pdf), ([source](euler-lagrange.typ))
+* [Neural Networks](https://github.com/msakuta/typst-test/blob/gh-pages/neural-network.pdf), ([source](neural-network.typ))
 
 ## How to build
 
