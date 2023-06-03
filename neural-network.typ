@@ -265,12 +265,12 @@ The definition of derivative is as follows:
 
 $ (d f) / (d x) = lim_(epsilon -> 0) (f(x + epsilon) - f(x)) / epsilon $ <eq:derive>
 
-The notion like $(d f)/(d x)$ was invented by Leipniz, who is also credited as one of the inventors of the calculus.
+The notion like $(d f)/(d x)$ was invented by Leibniz, who is also credited as one of the inventors of the calculus.
 The other person in credit that invented calculus at the same time (how that could happen was an interesting story for another time) is Newton.
 He also invented his version of notation, like $dot(f)$.
 It is sometimes written as $f'$ too, although I don't know who invented it.
 
-The Leipniz notation has an advantage that it indicates a variable that derive $f$ with respect to.
+The Leibniz notation has an advantage that it indicates a variable that derive $f$ with respect to.
 It is especially handy with partial derivatives.
 The Newton notation implies that the function is derived with respect to time variable, so it has limits when you want to apply it to other variables.
 
