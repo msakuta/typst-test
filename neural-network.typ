@@ -5,13 +5,40 @@
 // Take a look at the file `template.typ` in the file panel
 // to customize this template and discover how it works.
 #show: project.with(
-  title: "Neural Network",
+  title: "Neural Networks",
   authors: (
     "James",
   ),
 )
 
 #outline()
+
+= A little bit of history
+
+The history of neural networks is like a series of emerging waves.
+It oscillates between periods of hyped and lost interest from the society like @fig:timeline.
+
+#figure(
+  image("neuralnetwork-timeline.png"),
+  caption: [A brief timeline of neural networks]
+) <fig:timeline>
+
+Its origins can be traced back to the 1940s.
+It is based on the formal neuron model proposed by Warren McCulloch and Walter Pitts, but the most important in history is the perceptron published in 1958 by Frank Rosenblatt.
+However, the perceptron was difficult to scale up with the hardware of the time, and efficient learning methods had not been established, so the learning speed did not reach a practical level.
+
+After that, neural networks entered a dark age for a while, but a brief revival occurred in the 1980s when backpropagation using the sigmoid function was invented.
+However, it still entered another dark age again because it did not produce a practical level of performance.
+
+The tide has changed at the 2009 NIPS Workshop, where the Deep Belief Net implemented by Geoff Hinton produced a better score than any other state-of-the-art algorithms at that time.
+Around that time, convolutional neural networks were getting popular.
+They are good at image recognition in particular.
+Since then, artificial intelligence is dominated by deep learning to the point that just the word AI implies deep learning.
+
+#figure(
+  image("tahc_rosenblatt-sepia.jpg", width: 50%),
+  caption: [Probably the most famous historical photo of AI history, a portrait of Frank Rosenblatt]
+)
 
 = The model of the Perceptron
 
@@ -42,15 +69,17 @@ The sigmoid function is good and smooth, but the output range is fixed between 0
 Therefore, the sigmoid function is not without its shortcomings.
 
 As a result, ReLU (Regularized Linear Unit) which is defined as @eq_relu is often used these days.
+It looks like @relu.
 This function does not require a relatively expensive exponential function, since it is simple combination of identity and constant functions.
 Another advantage of it is that it has a value range from $0$ to $infinity$, and the derivative can be defined over the entire range of the variable.
 At this point, the analogy of biological neuron is like thrown out of the window.
 
 $ R(x) = cases(x & 0 < x, 0 &  "otherwise") $ <eq_relu>
 
-#align(center)[
-  #image("relu.png", width: 60%)
-]
+#figure(
+  image("relu.png", width: 60%),
+  caption: [A ReLU function]
+) <relu>
 
 Note that you could think of the simplest activation function as the identity transformation $f( x ) = x$.
 If you use it, however, no matter how deep the neural network architecture you are using, it can be collapsed into a single linear transformation, so it would be incapable of representing nonlinearity.
