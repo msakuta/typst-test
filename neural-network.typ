@@ -1,13 +1,14 @@
 #import "template.typ": *
 
 #set math.equation(numbering: "(1)")
+#set heading(numbering: "1.")
 
 // Take a look at the file `template.typ` in the file panel
 // to customize this template and discover how it works.
 #show: project.with(
   title: "Neural Networks",
   authors: (
-    "James",
+    "Masahiro Sakuta",
   ),
 )
 
@@ -222,14 +223,41 @@ The idea of ​​this algorithm is a bit like his FFT butterfly operation.
 
 In this way, calculation is performed in order from the output side to the input side, so it is called back propagation.
 
+= Batch training
+
+Loss function given in @eq_l was the result for only one sample.
+If we calculate all $N$ samples together, we get the following (we are running out of space for subscripts,
+but the superscript $[l]$ indicates the $l$th sample):
+
+$ L = 1/2 sum_(l = 1)^N ∑_k (A_k^[ l ] − s_k^((2) [ l ]))^2 $
+
+Since the partial derivatives are independent for each sample, the second term of the right side of @eq_w is as follows.
+
+$ −delta (diff L) / (diff w^((2))_(j k)) &= −delta sum_(l = 1)^N (diff L) / (diff s^((2) [l])_k) (diff s^((2) [l])_k) / (diff w^((2))_(j k)) \
+ &= −delta sum_(l = 1)^N (A_k − s^((2) [l])_k) (diff s^((2) [l])_k) / (diff w^((2))_(j k)) \
+ &= −delta sum_(l = 1)^N (A_k − s^((2) [l])_k) s^((1) [l])_j f'(sum_(j = 1)^N w^((2))_(j k) s^((1) [l])_j) $
+
+It is obvious that the gradient of the hidden layer can be calculated in the same way.
+
+Batch training is a method of determining the gradient direction from the loss functions of multiple samples at once.
+On the other hand, as we saw in the previous section, calculating the gradient direction from each sample one by one is called online training or stochastic gradient descent.
+There is also a method called mini-batch, where you train repeatedly with a sample size in bite-sized chunks.
+Each has advantages and disadvantages as described below.
+
+- Batch training has high stability and fast convergence because it descends a gradient that smoothes the data with variability.
+- Online training is swayed by noise in individual data, so convergence is poor, but it can be applied to very large training data that cannot be stored in memory.
+
 = Appendix
 
-== Derivatives
+== All You Need to Know about Derivatives
 
 You should know a little calculus to understand how neural networks work (or any machine learning algorithms in that regard).
 Your high school should have taught you about it, but the world is a diverse place now and I don't know if you had that opportunity.
 #footnote[Surprisingly many people don't have a clear idea of basic calculus, even in the field of AI research.
-I hope the reader is not one of them, or quit being a imposter like them.]
+I hope the reader is not one of them, or quit being an imposter like them.]
+
+I have tried to teach how the machine learning works to several people, and found out that some people have really hard time understanding it.
+Right now my theory why is that these people didn't understand basic math including calculus.
 
 === Ordinary derivatives
 
@@ -240,9 +268,11 @@ $ (d f) / (d x) = lim_(epsilon -> 0) (f(x + epsilon) - f(x)) / epsilon $ <eq:der
 The notion like $(d f)/(d x)$ was invented by Leipniz, who is also credited as one of the inventors of the calculus.
 The other person in credit that invented calculus at the same time (how that could happen was an interesting story for another time) is Newton.
 He also invented his version of notation, like $dot(f)$.
+It is sometimes written as $f'$ too, although I don't know who invented it.
 
 The Leipniz notation has an advantage that it indicates a variable that derive $f$ with respect to.
 It is especially handy with partial derivatives.
+The Newton notation implies that the function is derived with respect to time variable, so it has limits when you want to apply it to other variables.
 
 Let's do some exercies with basic functions.
 Consider a function @eq:square.
