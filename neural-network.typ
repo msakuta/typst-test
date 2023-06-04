@@ -245,21 +245,23 @@ Let's disect them into pieces.
 
 (2) we already calculated $(diff s^((2))_k) / (diff p^((2))_k) = f'(p^((2))_k)$.
 
-In summary, this whole summation can be reused to reduce the computation in the next layer.
-Let's call it $L^((1))_k$ for it being the "loss function" for the next layer.
-Note that it is a vector of $k$ elements because we need to take sum with a product with (3) later.
-
-$ L^((1))_k ident (diff L) / (diff s^((2))_k) (diff s^((2))_k) / (diff p^((2))_k) $
-
-This is the crucial part of the backpropagation.
-We are considering a neural network with 2 layers, but you can imagine extending this logic to many layers indefinitely.
-
 (3) can be calculated using @eq:p.
 
 $ (diff p^((2))_k) / (diff s^((1))_j) &= diff / (diff s^((1))_j) sum_(j = 1)^n w^((2))_(j k) s^((1))_j \
  &= w^((2))_(j k) $
 
-Now, we want to calculate the last factor, but to make them simplier, let's define an intermediate variable like before:
+In summary, this whole summation can be reused to reduce the computation in the next layer.
+Let's call it $L^((1))_j$ for it being the "loss function" for the next layer.
+#footnote[Technically, it is a _derivative_ of the loss function, but we don't want to put any more fancy notations.]
+Note that it is a vector of $j$ elements.
+
+$ L^((1))_j &ident sum_(k = 1)^(n_k) (diff L) / (diff s^((2))_k) (diff s^((2))_k) / (diff p^((2))_k) (diff p^((2))_k) / (diff s^((1))_j) \
+ &= sum_(k = 1)^(n_k) (A_k - s^((2))_k) f'(p^((2))_k) w^((2))_(j k) $
+
+This is the crucial part of the backpropagation.
+We are considering a neural network with 2 layers, but you can imagine extending this logic to many layers indefinitely.
+
+Now, we want to calculate (4), but to make them simplier, let's define an intermediate variable like before:
 
 $ p^((1))_j = sum_(i = 1)^n w^((1))_(i j) s_i $
 
@@ -271,13 +273,13 @@ $ (diff s^((1))_j) / (diff w^((1))_(i j)) &= (diff s^((1))_j) / (diff p^((1))_j)
 
 The whole expression becomes
 
-$ (diff L) / (diff w^((1))_(i j)) = sum_(k = 1)^(n_k) L^((1))_k w^((2))_(j k) s_i f'(p^((1))_j) $
+$ (diff L) / (diff w^((1))_(i j)) = L^((1))_j s_i f'(p^((1))_j) $
 
 With a neural network of only few layers, we cannot really feel the benefits of reusing the previous layer's computation.
 However, the number of repeated computations grow exponentially as the layers get deeper, so this technique is essential to the large scale deep learning.
-The idea of this algorithm is a bit like his FFT butterfly operation.
+The idea of this algorithm is a bit like FFT butterfly operation.
 
-Calculation is performed in order from the output side to the input side, so it is called back propagation.
+Calculation is performed in order from the output side to the input side, so it is called backpropagation.
 
 = Batch training
 
