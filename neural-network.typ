@@ -112,11 +112,13 @@ From the discussion so far, it is obvious that the number of hidden layers can b
 
 You could also use matrix multiplication to represent @eq_feedforward1 or @eq_feedforward2.
 
-$ s^((1)) &= f( bold(w)^((1)) dot bold(s) ) \
-s^((2)) &= f( bold(w)^((2)) dot bold(s)^((1)) ) $
+$ bold(s)^((1)) &= f( W^((1)) bold(s) ) \
+  bold(s)^((2)) &= f( W^((2)) bold(s)^((1)) ) $
+
+Here, $W$ is a matrix and $bold(s)$ is a column vector.
 
 Parallel computing utilizing GPU is really good at this kind of computation.
-There are many Python math libraries that can do this, such as MATLAB, SciPy, NumPy, and Pandas.
+There are many math libraries that can do this, such as MATLAB, SciPy, NumPy, and Pandas.
 
 = Bias term
 
@@ -130,13 +132,23 @@ In practice, we often put a constant input in each layer, unaffected by previous
 
 The usefulness of this is to have constant degrees of freedom in the arguments of the activation function.
 For example, Let the last signal in the input layer $s_n$ be a constant value $1$.
-Then we can transformed @eq_feedforward1 into
+Then we can transform @eq_feedforward1 into
 
-$ s^((1))_j = f(w_(n j) + sum_(i = 1)^n w^((1))_(i j) s_i) $
+$ s^((1))_j = f(w_(0 j) + sum_(i = 1)^n w^((1))_(i j) s_i) $
 
-This is effectively the same as shifting the origin of the activation function by $−w_(n j)$.
+This is effectively the same as shifting the origin of the activation function by $-w_(0 j)$.
 In this way, the offset of the origin can be included in the weight matrix and the offset need not be considered as a separate optimization target.
 In Rosenblatt's perceptron, the activation threshold is a separate parameter from the weight, which increases the complexity of multi-layering.
+
+We can also add a bias term to the intermediate layer.
+
+$ s^((2))_k = f(w^((2))_(0 k) + sum_(j = 1)^n w^((2))_(j k) s^((1))_j) $
+
+A more concise way to put it is to include a constant term in the input signal.
+So $bold(s)$ will be $(s_1, s_2, ... s_n, 1)$ an we can simply write
+
+$ bold(s)^((1))_j &= f(W^((1)) bold(s)) \
+  bold(s)^((2))_j &= f(W^((2)) bold(s^((1)))) = f(W^((2)) f(W^((1)) s)) $
 
 = Backpropagation
 
@@ -146,7 +158,9 @@ First, let's define the cost function $L$, which is a indication of the magnitud
 This is defined in terms of the ground truth $A_k$ and the predicted answer $s^((2))_k$ as @eq_l.
 Here, the reason why the deviation from the ground truth is squared isn't entirely clear, but it will become clear in a later section.
 
-$ L = 1 / 2 sum_k(A_k − s^((2))_k)^2 $ <eq_l>
+$ L = 1 / 2 sum_k(A_k - s^((2))_k)^2 $ <eq_l>
+
+== Gradient of the Weights on the First Layer
 
 First, let's think about how we can modify the output layer weights $w^((2))_(j k)$ so that the prediction get closer to the correct answer.
 It means finding the direction of motion in $bold(w)$ space that decreases $L$, so we can take gradient of $L$ with respect to each element of $bold(w)$.
@@ -160,68 +174,110 @@ This corresponds to the gradient descent method in the optimization problem, and
 
 Calculating the second term on the right-hand side of @eq_w, from the chain rule of composite functions,
 
-$ − delta (diff L)/(diff w^((2))_(j k)) &= − delta (diff L)/(diff s^((2))_k ) (diff s^((2))_k)/(diff w^((2))_(j k)) \
-&= − delta (A_k − s^((2))_k) (diff s^((2))_k)/(diff w^((2))_(j k)) $
+$ - delta (diff L)/(diff w^((2))_(j k)) &= - delta (diff L)/(diff s^((2))_k ) (diff s^((2))_k)/(diff w^((2))_(j k)) \
+&= delta (A_k - s^((2))_k) (diff s^((2))_k)/(diff w^((2))_(j k)) $
 
 and can be easily calculated from only the difference between the teacher signal answer and the predicted answer.
 
 Let's focus on the second half $(diff s^((2))_k)/(diff w^((2))_(j k))$.
-Since the variables are related with the activation function $f$ through @eq_feedforward2,
-we can simplify the calculation by placing an intermediate variable $p_k$, which is the argument given to $f$.
+Since the variables are related with the activation function $f$ through @eq_feedforward2 like below.
+we can simplify the calculation by placing an intermediate variable $p^((2))_k$, which is the argument given to $f$.
 
-$ p_k ident sum_(j=1)^n w^((2))_(j k) s^((1))_j $
+$ p^((2))_k ident sum_(j=1)^n w^((2))_(j k) s^((1))_j $ <eq:p>
 
 Here we can use the chain rule again to yield
 
-$ (diff s^((2))_k) / (diff w^((2))_(j k)) = (diff s^((2))_k) / (diff p_k) (diff p_k)/(diff w^((2))_(j k)). $
+$ (diff s^((2))_k) / (diff w^((2))_(j k)) = (diff s^((2))_k) / (diff p^((2))_k) (diff p^((2))_k)/(diff w^((2))_(j k)). $
 
-$(diff s^((2))_k)/(diff p_k)$ is the derivative of the activation function $f'$.
+$(diff s^((2))_k)/(diff p^((2))_k)$ is the derivative of the activation function $f'$.
 
 Also we can use
 
-$ (diff p_k) / (diff w^((2))_(j k)) &= diff / (diff w^((2))_(j k)) sum_(j=1)^n w^((2))_(j k ) s^((1))_j \
+$ (diff p^((2))_k) / (diff w^((2))_(j k)) &= diff / (diff w^((2))_(j k)) sum_(j=1)^n w^((2))_(j k ) s^((1))_j \
 &=s^((1))_j $
 
 to represent
 
-$ (diff s^((2))_k) / (diff w^((2))_(j k)) = s^((1))_j f′(p_k) $
+$ (diff s^((2))_k) / (diff w^((2))_(j k)) = s^((1))_j f'(p^((2))_k) $
 
 Once again we write the entire @eq_w as
 
-$ lr(w^((2))_(j k)|)_(t+1) = lr(w^((2))_(j k)|)_t − delta (A_k − s^((2))_k) s^((1))_j f′(p_k) $
+$ lr(w^((2))_(j k)|)_(t+1) = lr(w^((2))_(j k)|)_t + delta (A_k - s^((2))_k) s^((1))_j f'(p^((2))_k) $
 
 From here, it is obvious that backpropagation requires that the activation function can be derived.
 
 Here we can use a little trick when the activation function is a sigmoid function.
 
 $
-(diff σ) / (diff x) &= diff / (diff x) 1 / (1 + e^(−x)) \
-&= e^(−x) 1 / (1 + e^(−x))^2 \
-&= (1 + e^(−x) - 1) / (1 + e^(−x)) 1/(1 + e^(−x)) \
-&= (1 − 1 / (1 + e^(−x))) 1 / (1 + e^(−x)) \
-&= (1 − sigma) sigma
+(diff sigma) / (diff x) &= diff / (diff x) 1 / (1 + e^(-x)) \
+&= e^(-x) 1 / (1 + e^(-x))^2 \
+&= (1 + e^(-x) - 1) / (1 + e^(-x)) 1/(1 + e^(-x)) \
+&= (1 - 1 / (1 + e^(-x))) 1 / (1 + e^(-x)) \
+&= (1 - sigma) sigma
 $
 
 Using this, @eq_w can be further rewritten as follows:
 
-$ lr(w^((2))_(j k)|)_(t + 1) = lr(w^((2))_(j k)|)_t − delta (A_k − s^((2))_k) s^((1))_j (1 − s^((2))_k) s^((2))_k $
+$ lr(w^((2))_(j k)|)_(t + 1) = lr(w^((2))_(j k)|)_t + delta (A_k - s^((2))_k) s^((1))_j (1 - s^((2))_k) s^((2))_k $
 
-In addition, let's think about what the hidden layer weights $w^((1))_(i j)$ will be.
-We can replace the weight of $w^((1))_(i j)$ in @eq_w, but the method of applying the chain rule will change.
-Since there is a index variable $k$ which is neither the final indices $i, j$,
+== Backpropagating to the first layer
+
+Now, let's focus on the hidden layer weights $w^((1))_(i j)$.
+We can replace the weight of $w^((1))_(i j)$ in @eq_w like below.
+
+$ lr( w^((1))_(i j) |)_(t+1) = lr(w^((1))_(i j)|)_t - delta lr((diff L)/(diff w^((1))_(i j))|)_t $ <eq_w1>
+
+However, the method of applying the chain rule will change.
+Since there is an index variable $k$ which is neither the final indices $i, j$,
 the whole derivative becomes total derivative, not the partial derivative.
 
 $ (diff L) / (diff w^((1))_(i j)) &= sum_k (diff L) / (diff s^((2))_k) (diff s^((2))_k) / (diff w^((1))_(i j)) \
-&= sum_k (diff L) / (diff s^((2))_k) (diff s^((2))_k) / (diff s^((1))_j) (diff s^((1))_j) / (diff w^((1))_(i j)) $
+&= sum_k (diff L) / (diff s^((2))_k) (diff s^((2))_k) / (diff s^((1))_j) (diff s^((1))_j) / (diff w^((1))_(i j)) \
+&= sum_k underbracket((diff L) / (diff s^((2))_k), (1))
+         underbracket((diff s^((2))_k) / (diff p^((2))_k), (2))
+         underbracket((diff p^((2))_k) / (diff s^((1))_j), (3))
+         underbracket((diff s^((1))_j) / (diff w^((1))_(i j)), (4)) $
 
-here, $(diff L) / (diff s^((2))_k)$ is nothing but the term calculated in the previous step $A_k − s^((2))_k$.
-This can be used to reuse parts of the computation.
-With a neural network of only few layers, we cannot really feel the benefits, but in fact, as the depth of the hidden layer increases, the number of intermediate variables increases, so the number of parts that can be reused in calculations increases steadily.
-In other words, if the calculation is performed from the output side first, there is a calculation result that can be reused in the next stage.
-In particular, reuse of computation is important in deep neural networks because the amount of computation increases in the order of the depth of the layer to the power of the number of weighting factors per layer.
-The idea of ​​this algorithm is a bit like his FFT butterfly operation.
+Wow, there are a lot of factors!
+Let's disect them into pieces.
 
-In this way, calculation is performed in order from the output side to the input side, so it is called back propagation.
+(1) we already calculated $(diff L) / (diff s^((2))_k) = A_k - s^((2))_k$.
+
+(2) we already calculated $(diff s^((2))_k) / (diff p^((2))_k) = f'(p^((2))_k)$.
+
+In summary, this whole summation can be reused to reduce the computation in the next layer.
+Let's call it $L^((1))_j$ for it being the "loss function" for the next layer.
+Note that it's a vector of $n_j$ elements, since the previous layer has its own output size.
+
+$ L^((1))_j ident sum_k (diff L) / (diff s^((2))_k) (diff s^((2))_k) / (diff s^((1))_j) $
+
+This is the crucial part of the backpropagation.
+We are considering a neural network with 2 layers, but you can imagine extending this logic to many layers indefinitely.
+
+(3) can be calculated using @eq:p.
+
+$ (diff p^((2))_k) / (diff s^((1))_j) &= diff / (diff s^((1))_j) sum_(j = 1)^n w^((2))_(j k) s^((1))_j \
+ &= w^((2))_(j k) $
+
+Now, we want to calculate the last factor, but to make them simplier, let's define an intermediate variable like before:
+
+$ p^((1))_j = sum_(i = 1)^n w^((1))_(i j) s_i $
+
+Using this, we can write (4) as
+
+$ (diff s^((1))_j) / (diff w^((1))_(i j)) &= (diff s^((1))_j) / (diff p^((1))_j) (diff p^((1))_j) / (w^((1))_(i j)) \
+ &= f'(p^((1))_j) diff / (diff w^((1))_(i j)) sum_(i = 1)^n w^((1))_(i j) s_i \
+ &= s_i f'(p^((1))_j) $
+
+The whole expression becomes
+
+$ (diff L) / (diff w^((1))_(i j)) = L^((1))_j w^((2))_(j k) s_i f'(p^((1))_j) $
+
+With a neural network of only few layers, we cannot really feel the benefits of reusing the previous layer's computation.
+However, the number of repeated computations grow exponentially as the layers get deeper, so this technique is essential to the large scale deep learning.
+The idea of this algorithm is a bit like his FFT butterfly operation.
+
+Calculation is performed in order from the output side to the input side, so it is called back propagation.
 
 = Batch training
 
@@ -229,13 +285,13 @@ Loss function given in @eq_l was the result for only one sample.
 If we calculate all $N$ samples together, we get the following (we are running out of space for subscripts,
 but the superscript $[l]$ indicates the $l$th sample):
 
-$ L = 1/2 sum_(l = 1)^N ∑_k (A_k^[ l ] − s_k^((2) [ l ]))^2 $
+$ L = 1/2 sum_(l = 1)^N ∑_k (A_k^[ l ] - s_k^((2) [ l ]))^2 $
 
 Since the partial derivatives are independent for each sample, the second term of the right side of @eq_w is as follows.
 
-$ −delta (diff L) / (diff w^((2))_(j k)) &= −delta sum_(l = 1)^N (diff L) / (diff s^((2) [l])_k) (diff s^((2) [l])_k) / (diff w^((2))_(j k)) \
- &= −delta sum_(l = 1)^N (A_k − s^((2) [l])_k) (diff s^((2) [l])_k) / (diff w^((2))_(j k)) \
- &= −delta sum_(l = 1)^N (A_k − s^((2) [l])_k) s^((1) [l])_j f'(sum_(j = 1)^N w^((2))_(j k) s^((1) [l])_j) $
+$ -delta (diff L) / (diff w^((2))_(j k)) &= -delta sum_(l = 1)^N (diff L) / (diff s^((2) [l])_k) (diff s^((2) [l])_k) / (diff w^((2))_(j k)) \
+ &= -delta sum_(l = 1)^N (A_k - s^((2) [l])_k) (diff s^((2) [l])_k) / (diff w^((2))_(j k)) \
+ &= -delta sum_(l = 1)^N (A_k - s^((2) [l])_k) s^((1) [l])_j f'(sum_(j = 1)^N w^((2))_(j k) s^((1) [l])_j) $
 
 It is obvious that the gradient of the hidden layer can be calculated in the same way.
 
