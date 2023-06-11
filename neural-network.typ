@@ -86,6 +86,16 @@ Note that you could think of the simplest activation function as the identity tr
 If you use it, however, no matter how deep the neural network architecture you are using, it can be collapsed into a single linear transformation, so it would be incapable of representing nonlinearity.
 Also, since the entire network can be collapsed into one linear transformation, there would be no point having intermediate layers.
 
+There are a lot of variants of ReLU, in attempt to overcome the limitation of flat derivative part.
+One of them is SiLU (Sigmoid Linear Unit), a sigmoid multiplied by a proportional function.
+It looks like ReLU as a whole, but the derivative is not zero over the whole value range.
+
+$ sigma(x) = x / (1 + e^(-x)) $ <eq:silu>
+
+#figure(
+  image("silu.svg", width: 60%),
+  caption: [A SiLU function]
+) <silu>
 
 = Feed Forward Neural Network
 
