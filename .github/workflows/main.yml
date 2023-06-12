@@ -16,6 +16,10 @@ jobs:
       uses: lvignoli/typst-action@v0
       with:
         source_file: euler-lagrange.typ
+    - name: Build euler-lagrange-jp.pdf with Typst
+      uses: lvignoli/typst-action@v0
+      with:
+        source_file: euler-lagrange-jp.typ
     - name: Build neural-network.pdf with Typst
       uses: lvignoli/typst-action@v0
       with:
@@ -26,6 +30,11 @@ jobs:
       with:
         name: Euler-Lagrange PDF
         path: euler-lagrange.pdf
+    - name: Upload Euler-Lagrange JP PDF file
+      uses: actions/upload-artifact@v3
+      with:
+        name: Euler-Lagrange JP PDF
+        path: euler-lagrange-jp.pdf
     - name: Upload Neural network PDF file
       uses: actions/upload-artifact@v3
       with:
