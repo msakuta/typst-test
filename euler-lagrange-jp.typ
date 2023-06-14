@@ -1,7 +1,7 @@
 #set page(
   numbering: "1",
 )
-#set text(font: "Noto Serif JP")
+// #set text(font: "Noto Serif JP")
 // #set text(font: "Yu Mincho")
 #set heading(numbering: "1.")
 #set math.equation(numbering: "(1)")
