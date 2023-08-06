@@ -156,6 +156,15 @@ $
 cal(D)(f_1 f_2) = sum_(j=0)^N sum_(k=0)^(N-j) f_1^((j)) f_2^((k)) binom(j + k, k) bold(i)_(j + k)
 $
 
+Encoding these rules in Rust code is a bit of hussle, but we can define a type `Dvec` that can handle arbitrary order of differentiations as you can find in the repository #footnote[https://github.com/msakuta/rustograd/blob/dnum/src/dvec.rs].
+You can see that the result @fig:dvec-diff2 agrees with the manual differentiation @fig:manual-diff2.
+
+#figure(
+    image("second-derive-dvec.svg", width: 70%),
+    caption: [A Gaussian distribution differentiations using Dvec]
+) <fig:dvec-diff2>
+
+
 = Literature
 
 There are many researches on this topic, but they are much less than the first order differentiation, and they tend to be mathematically abstract and hard to apply. These are the only few papers that I found useful (in the sense that is understandable and implementable by me)
