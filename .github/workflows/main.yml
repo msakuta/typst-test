@@ -24,6 +24,10 @@ jobs:
       uses: lvignoli/typst-action@v0
       with:
         source_file: neural-network.typ
+    - name: Build higher-order-automatic-differentiation.pdf with Typst
+      uses: lvignoli/typst-action@v0
+      with:
+        source_file: higher-order-automatic-differentiation.typ
 
     - name: Upload Euler-Lagrange PDF file
       uses: actions/upload-artifact@v3
@@ -40,6 +44,11 @@ jobs:
       with:
         name: Neural network PDF
         path: neural-network.pdf
+    - name: Upload Higher order automatic differentiation PDF file
+      uses: actions/upload-artifact@v3
+      with:
+        name: Higher order automatic differentiation PDF
+        path: higher-order-automatic-differentiation.pdf
 
     - run: mkdir output && cp *.pdf output/
 
