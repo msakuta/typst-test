@@ -46,6 +46,20 @@ Mul(lhs, rhs) => {
 }
 ```
 
+We could go as far as @fig:manual-diff2 with this approach.
+Here we differentiate a Gaussian function up to the second order differentiation.
+
+$
+f(x) &= exp(-x^2) \
+(d f) / (d x) &= -2 x exp(-x^2) \
+(d^2 f) / (d x^2) &= (-2 + 4 x) exp(-x^2)
+$
+
+#figure(
+    image("second-derive.svg", width: 70%),
+    caption: [A Gaussian distribution and its up to the second order differentiations]
+) <fig:manual-diff2>
+
 But it has many obvious problems. It is not scalable, it only works for forward mode differentiation, it can't work for multivariate functions and it feels like not automatic at all.
 
 = Higher Order Automatic Differentiation with Dual Numbers
