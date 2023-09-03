@@ -11,6 +11,8 @@
 
 #outline()
 
+= Overview
+
 Sometimes we want to have more than 1 order differentiation. An example is quadratic programming. However, it is very hard to find literature that can handle more than 1 order differentiation.
 
 = Manual calculation of higher order chain rules
@@ -163,6 +165,75 @@ You can see that the result @fig:dvec-diff2 agrees with the manual differentiati
     image("second-derive-dvec.svg", width: 70%),
     caption: [A Gaussian distribution differentiations using Dvec]
 ) <fig:dvec-diff2>
+
+
+= Generating subgraphs
+
+We can generate subgraphs from existing nodes.
+In this way, we can support higher order differentiation or even a function that includes derivatives.
+
+$
+f(x) = g(x) + (d h(x))/(d x)
+$
+
+
+= Differentiation of $arctan(y,x)$
+
+To compute differentiation of $arctan(y,x)$,
+
+$
+f(x) &= arctan(x) \
+(dif f(x))/(dif x) &= ( (dif f^(-1)(x))/(dif x) )^(-1) \
+&= ( (dif)/(dif x) tan(x) )^(-1) = ( (dif)/(dif x) (sin(x))/(cos(x)) )^(-1) \
+&= ( (cos(x))/(cos(x)) - (sin(x))/(cos^2(x)) )^(-1) = ( (cos^2(x) - sin(x))/(cos^2(x)) )^(-1)
+$
+
+
+= Differentiation of Matrix Products
+
+Let's say we have matrices $A in bb(R)^(n times m)$ and $B in bb(R)^(m times l)$, both potentially a function of some variable. How do we calculate the derivative $d (A B)$?
+
+First, let's write the total derivative.
+
+$
+d {A B_(i j)} = sum_(k=1)^m (d a_(i k) space b_(k j) + a_(i k) space d b_(k j))
+space (i in [1,n], j in [1,l])
+$
+
+Let's consider the case of derivative with respect to $a_(p l)$.
+
+$
+(diff {A B_(i j)}) / (diff a_(p l)) = (sum_k b_(k j) space diff a_(p l)) / (diff a_(p l)) = b_(l j) delta_(i p)
+$
+
+Similarly, we can compute
+
+$
+(diff {A B_(i j)}) / (diff b_(p l)) = (sum_k a_(i k) space diff b_(k j)) / (diff b_(p l)) = a_(i p) delta_(j p)
+$
+
+The question is, how much contribution do we have from each variable in the matrix.
+We would have to accumulate the influence through every path that goes through the product.
+
+$
+sum_(i=1)^n sum_(j=1)^l (diff {A B_(i j)}) / (d a_(p l)) &= sum_j b_(l j) \
+sum_(i=1)^n sum_(j=1)^l (diff {A B_(i j)}) / (d b_(p l)) &= sum_i a_(i p)
+$ <eq:ab>
+
+Actually, the story is a bit more complicated, because the matrix product is often an intermediate step in the chain of computations.
+When we backpropagate, we have a term like below by the product rule.
+
+$
+f_(i j) (diff {A B_(i j)}) / (d a_(p l))
+$
+where $f_(i j)$ is some arbitrary function.
+
+Therefore, @eq:ab would be written like below, which is really dot products.
+
+$
+sum_(i=1)^n sum_(j=1)^l f_(i j) (diff {A B_(i j)}) / (d a_(p l)) &= sum_j f_(i j) b_(l j) = bold(f)_i bold(b)_l^T \
+sum_(i=1)^n sum_(j=1)^l f_(i j) (diff {A B_(i j)}) / (d b_(p l)) &= sum_j f_(i j) a_(i p) = bold(f)_j^T bold(a)_p
+$
 
 
 = Literature
