@@ -20,6 +20,9 @@ jobs:
       uses: lvignoli/typst-action@v0
       with:
         source_file: euler-lagrange-jp.typ
+        options: |
+          --font-path
+          fonts
     - name: Build neural-network.pdf with Typst
       uses: lvignoli/typst-action@v0
       with:
