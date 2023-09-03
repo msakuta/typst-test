@@ -193,7 +193,7 @@ Let's focus on the second half $(diff s^((2))_k)/(diff w^((2))_(j k))$.
 Since the variables are related with the activation function $f$ through @eq_feedforward2 like below.
 we can simplify the calculation by placing an intermediate variable $p^((2))_k$, which is the argument given to $f$.
 
-$ p^((2))_k ident sum_(j=1)^n w^((2))_(j k) s^((1))_j $ <eq:p>
+$ p^((2))_k equiv sum_(j=1)^n w^((2))_(j k) s^((1))_j $ <eq:p>
 
 Here we can use the chain rule again to yield
 
@@ -265,7 +265,7 @@ Let's call it $L^((1))_j$ for it being the "loss function" for the next layer.
 #footnote[Technically, it is a _derivative_ of the loss function, but we don't want to put any more fancy notations.]
 Note that it is a vector of $j$ elements.
 
-$ L^((1))_j &ident sum_(k = 1)^(n_k) (diff L) / (diff s^((2))_k) (diff s^((2))_k) / (diff p^((2))_k) (diff p^((2))_k) / (diff s^((1))_j) \
+$ L^((1))_j &equiv sum_(k = 1)^(n_k) (diff L) / (diff s^((2))_k) (diff s^((2))_k) / (diff p^((2))_k) (diff p^((2))_k) / (diff s^((1))_j) \
  &= sum_(k = 1)^(n_k) (A_k - s^((2))_k) f'(p^((2))_k) w^((2))_(j k) $
 
 This is the crucial part of the backpropagation.

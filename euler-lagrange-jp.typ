@@ -24,11 +24,9 @@ $ (diff cal(L)) / (diff q_i) - d / (d t) (diff cal(L)) / (diff dot(q_i)) = 0  $ 
 
 ラグランジュ関数は
 
-$ L = T − V $
+$ L = T - V $
 
-と定義される。ここで T
- は運動エネルギー、 V
- はポテンシャルエネルギーである。
+と定義される。ここで $T$ は運動エネルギー、 $V$ はポテンシャルエネルギーである。
 
 このようにいきなり書かれても何がなんだかわからないし、いきなり覚えようとしても難しいが、これは非常に強力なツールで、特に座標系を普通の直交座標系以外のものにした場合にもニュートンの運動方程式に相当するものを導出できる優れものである。 実際の物理的描像を理解したり、問題に適用してみたりするにつれて覚えられるようになるだろう。
 
@@ -86,7 +84,7 @@ $ diff / (diff x_i) &= diff / (diff x_i) f (x_i, (x_i - x_(i - 1)) / epsilon) \
 &= (diff f_i) / (diff x_i) + 1 / epsilon (diff f_i) / (diff v_i)
 $
 
-となる。 ここで煩雑なので $v_i ident (x_i - x_(i−1)) / epsilon$ とおいた。
+となる。 ここで煩雑なので $v_i equiv (x_i - x_(i−1)) / epsilon$ とおいた。
 
 ただし、実際には全体の $(diff f) / (diff x_i)$ を求めたいので、 $f_(i+1)$ からの寄与も生じる。
 
@@ -214,7 +212,7 @@ $ delta cal(L)(arrow(q), arrow(dot(q))) = sum_i ((diff cal(L)) / (diff q_i) delt
 
 さて、ラグランジュ関数がオイラー・ラグランジュの方程式を満たすとき、すなわち運動の法則を満たすとき、 @euler が成り立つということを上では導出した。 簡単のため、
 
-$ (diff cal(L)) / (diff dot(q)_i) ident p_i. $ <Lqdotp>
+$ (diff cal(L)) / (diff dot(q)_i) equiv p_i. $ <Lqdotp>
 
 という記号を導入する。 これはデカルト座標系では運動量に相当するものであるが、一般的には運動量以外の「何か」になりうる。
 
@@ -249,7 +247,7 @@ $ d / (d t) sum_i p_i f_i (arrow(q)) = 0 $
 
 ここで、時間微分される対象の量
 
-$ Q ident sum_i p_i f_i (arrow(q)) $
+$ Q equiv sum_i p_i f_i (arrow(q)) $
 
 が保存量となる。
 
@@ -284,7 +282,7 @@ $ d / (d t) { cal(L) - sum_i p_i dot(q)_i } = 0 $ <lagrange-dt>
 
 ここで時間微分されている中身
 
-$ cal(H) ident sum_i p_i dot(q)_i - cal(L) $
+$ cal(H) equiv sum_i p_i dot(q)_i - cal(L) $
 
 をハミルトニアンと呼ぶ。
 なぜこの符号かというと、定義の問題であり、歴史的経緯でこうなっているようである。

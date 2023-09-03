@@ -22,7 +22,7 @@ where $L$ is Lagrangean, $q_i$ generalized coordinate,
 $dot(q)_i$ generalized velocity (generalized coordinate derived w.r.t time).
 
 Lagrangean is defined as
-$ L = T − V $
+$ L = T - V $
 where $T$ is kinetic energy, $V$ potential energy.
 
 When you are thrown at this equations you would understand nothing
@@ -81,7 +81,7 @@ $ diff / (diff x_i) &= diff / (diff x_i) f (x_i, (x_i - x_(i - 1)) / epsilon) \
 &= (diff f_i) / (diff x_i) + (diff v_i) / (diff x_i) (diff f_i) / (diff v_i) \
 &= (diff f_i) / (diff x_i) + 1 / epsilon (diff f_i) / (diff v_i)
 $
-where I defined $v_i ident (x_i - x_(i-1)) / epsilon$ for brevity.
+where I defined $v_i equiv (x_i - x_(i-1)) / epsilon$ for brevity.
 
 We also need to consider the contribution from $f_i + 1$ to calculate total effect on $(diff f) / (diff x_i)$.
 
@@ -211,7 +211,7 @@ $ delta cal(L)(arrow(q), arrow(dot(q))) = sum_i ((diff cal(L)) / (diff q_i) delt
 Now, we have derived that if Lagrangean satisfies Euler-Lagrange equation, i.e. satisfies laws of motion, we can say @euler.
 For brevity, we introduce a symbol
 
-$ (diff cal(L)) / (diff dot(q)_i) ident p_i. $ <Lqdotp>
+$ (diff cal(L)) / (diff dot(q)_i) equiv p_i. $ <Lqdotp>
 
 which is synonymous to momentum in classical mechanics, but it can represent more abstract quantity in quantum mechanics.
 
@@ -240,7 +240,7 @@ $ d / (d t) sum_i p_i f_i (arrow(q)) = 0 $
 
 Then, the quantity inside derivative w.r.t. time,
 
-$ Q ident sum_i p_i f_i (arrow(q)) $
+$ Q equiv sum_i p_i f_i (arrow(q)) $
 
 is the value to be conserved.
 
@@ -275,7 +275,7 @@ $ d / (d t) { cal(L) - sum_i p_i dot(q)_i } = 0. $
 
 Here, the contents being derived by time
 
-$ cal(H) ident sum_i p_i dot(q)_i - cal(L) $
+$ cal(H) equiv sum_i p_i dot(q)_i - cal(L) $
 
 is called Hamiltonian.
 It seems that the sign of the Hamiltonian is defined in this way by historical reasons.
