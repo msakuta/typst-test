@@ -185,7 +185,8 @@ $
 f(x) &= arctan(x) \
 (dif f(x))/(dif x) &= ( (dif f^(-1)(x))/(dif x) )^(-1) \
 &= ( (dif)/(dif x) tan(x) )^(-1) = ( (dif)/(dif x) (sin(x))/(cos(x)) )^(-1) \
-&= ( (cos(x))/(cos(x)) - (sin(x))/(cos^2(x)) )^(-1) = ( (cos^2(x) - sin(x))/(cos^2(x)) )^(-1)
+&= ( (cos(x))/(cos(x)) - (sin(x))/(cos^2(x)) )^(-1) = ( (cos^2(x) - sin(x))/(cos^2(x)) )^(-1) \
+&= (cos^2(x)) / (cos^2(x) - sin(x))
 $
 
 
@@ -196,44 +197,52 @@ Let's say we have matrices $A in bb(R)^(n times m)$ and $B in bb(R)^(m times l)$
 First, let's write the total derivative.
 
 $
-d {A B_(i j)} = sum_(k=1)^m (d a_(i k) space b_(k j) + a_(i k) space d b_(k j))
+d {A B_(i j)} = d sum_(k=1)^m a_(i k) space b_(k j)
+= sum_(k=1)^m (d a_(i k) space b_(k j) + a_(i k) space d b_(k j))
 space (i in [1,n], j in [1,l])
 $
 
-Let's consider the case of derivative with respect to $a_(p l)$.
+Let's consider the case of derivative with respect to $a_(p q)$.
+Note that this is a 4th order tensor with indices $i, j, p$ and  $q$.
+It's messy, but we will simplify quite a bit later.
 
 $
-(diff {A B_(i j)}) / (diff a_(p l)) = (sum_k b_(k j) space diff a_(p l)) / (diff a_(p l)) = b_(l j) delta_(i p)
+(diff {A B_(i j)}) / (diff a_(p q)) = (sum_k b_(k j) space diff a_(i k)) / (diff a_(p q)) = b_(q j) delta_(i p)
 $
 
 Similarly, we can compute
 
 $
-(diff {A B_(i j)}) / (diff b_(p l)) = (sum_k a_(i k) space diff b_(k j)) / (diff b_(p l)) = a_(i p) delta_(j p)
+(diff {A B_(i j)}) / (diff b_(p q)) = (sum_k a_(i k) space diff b_(k j)) / (diff b_(p q)) = a_(i p) delta_(j q)
 $
 
-The question is, how much contribution do we have from each variable in the matrix.
+The question is, how much contribution does each input variable has to the output variable.
 We would have to accumulate the influence through every path that goes through the product.
 
 $
-sum_(i=1)^n sum_(j=1)^l (diff {A B_(i j)}) / (d a_(p l)) &= sum_j b_(l j) \
-sum_(i=1)^n sum_(j=1)^l (diff {A B_(i j)}) / (d b_(p l)) &= sum_i a_(i p)
+sum_(i=1)^n sum_(j=1)^l (diff {A B_(i j)}) / (diff a_(p q)) &= sum_j b_(q j) \
+sum_(i=1)^n sum_(j=1)^l (diff {A B_(i j)}) / (diff b_(p q)) &= sum_i a_(i p)
 $ <eq:ab>
 
 Actually, the story is a bit more complicated, because the matrix product is often an intermediate step in the chain of computations.
 When we backpropagate, we have a term like below by the product rule.
 
 $
-f_(i j) (diff {A B_(i j)}) / (d a_(p l))
+f_(i j) (diff {A B_(i j)}) / (diff a_(p q))
 $
 where $f_(i j)$ is some arbitrary function.
 
 Therefore, @eq:ab would be written like below, which is really dot products.
 
 $
-sum_(i=1)^n sum_(j=1)^l f_(i j) (diff {A B_(i j)}) / (d a_(p l)) &= sum_j f_(i j) b_(l j) = bold(f)_i bold(b)_l^T \
-sum_(i=1)^n sum_(j=1)^l f_(i j) (diff {A B_(i j)}) / (d b_(p l)) &= sum_j f_(i j) a_(i p) = bold(f)_j^T bold(a)_p
+sum_(i=1)^n sum_(j=1)^l f_(i j) (diff {A B_(i j)}) / (diff a_(p q)) &= sum_j f_(i j) b_(q j) = bold(f)_([i,:]) bold(b)_([q,:])^T = F B^T \
+sum_(i=1)^n sum_(j=1)^l f_(i j) (diff {A B_(i j)}) / (diff b_(p q)) &= sum_i f_(i j) a_(i p) = bold(f)_([:,j])^T bold(a)_([:,p]) = F^T A
 $
+
+Here, we use notation $bold(b)_([q,:])$ to indicate the $q$-th row vector of $B$ and $bold(a)_([:,p])$ to indicate the $p$-th column vector of $A$, similar to numpy or PyTorch notation,
+because I don't know any better way of representing it...
+
+Anyway, it ends up with simple enough matrix multiplications.
 
 
 = Literature
